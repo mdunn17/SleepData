@@ -45,7 +45,7 @@ namespace SleepData
                     }
                     // M/d/yyyy,#|#|#|#|#|#|#
                     //Console.WriteLine($"{dataDate:M/d/yy},{string.Join("|", hours)}");
-                    sw.WriteLine($"{dataDate:M/d/yyyy},{string.Join("|", hours)}");
+                    sw.WriteLine($"{dataDate:M/d/yy},{string.Join("|", hours)}");
                     // add 1 week to date
                     dataDate = dataDate.AddDays(7);
                 }
@@ -55,8 +55,24 @@ namespace SleepData
             else if (resp == "2")
             {
                 // TODO: parse data file
-                //Console.WriteLine($"{dataDate:M/d/yy},{string.Join("|", hours)}");
-
+                string line;
+                using(StreamReader sw = new StreamReader("data.txt"))
+                {
+                    while((line = sw.ReadLine()) != null)
+                    {
+                        //Console.WriteLine(line);
+                        string date = line.Substring(0, line.IndexOf(","));
+                        var parsedDate = DateTime.Parse(date);
+                        Console.WriteLine($"Week of {parsedDate:MMM}, {parsedDate:dd}, {parsedDate:yyyy}");
+                        string[] sleepTimes1 = line.Split(",");
+                        string[] sleepTimes2 = sleepTimes1[1].Split("|");
+                        Console.WriteLine("Mo Tu We Th Fr Sa Su\n-- -- -- -- -- -- --");
+                        Console.WriteLine($"{sleepTimes2[0]} {sleepTimes2[1]} {sleepTimes2[2]} {sleepTimes2[3]} {sleepTimes2[4]} {sleepTimes2[5]} {sleepTimes2[6]}\n");
+                        //Console.WriteLine($"{sleepTimes1[1]}");
+                    }
+                    sw.Close();
+                }
+                    
             }
         }
     }
